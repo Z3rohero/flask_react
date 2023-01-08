@@ -48,17 +48,37 @@ def usuarios():
     return jsonify(user)
    
 
-@app.route('/usuarios/<id>', methods=["POST"])
-def getUser():
-    return '<h1>hellor word</h1>' 
+@app.route('/usuarios/<id>', methods=["GET"])
+def getUser(id):
+    user=client.db.usuarios.find_one({'_id':ObjectId(id)}) 
+    return  jsonify({
+        "encontrado usuario":str(ObjectId(user['_id'])),
+         'nombre': user['nombre'],
+          'email': user['email'],
+        'password': user['password']
+        })
+   
 
 @app.route('/usuarios/<id>', methods=["DELETE"])
 def delUser(id):
-    return '<h1>hellor word</h1>' 
+     user=client.db.usuarios.delete_one({'_id':ObjectId(id)})
+     return  jsonify({
+        "Usuario eliminado":"usuario eliminado",
+        })
 
 @app.route('/usuarios/<id>', methods=["PUT"])
 def setUser(id):
-    return '<h1>hellor word</h1>' 
+    ser=client.db.usuarios.update_one({'_id':ObjectId(id)},{
+        '$set':{
+            'nombre': request.json["nombre"],
+             'email':request.json["email"],
+             'password':request.json["password"]
+        }
+    })
+    return  jsonify({
+        "Usuario añadido":"usuario añadido",
+        })
+   
 
 if __name__=="__main__":
     app.run(debug=True)
