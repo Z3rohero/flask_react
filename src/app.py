@@ -68,17 +68,27 @@ def delUser(id):
 
 @app.route('/usuarios/<id>', methods=["PUT"])
 def setUser(id):
+    password=request.json["password"]
+    cifrado = generate_password_hash(password)
     ser=client.db.usuarios.update_one({'_id':ObjectId(id)},{
         '$set':{
             'nombre': request.json["nombre"],
              'email':request.json["email"],
-             'password':request.json["password"]
+             'password':cifrado
         }
     })
     return  jsonify({
-        "Usuario añadido":"usuario añadido",
+        "message":"usuario añadido",
         })
    
+@app.errorhandler(404)
+def not_encontrado(error=None):
+  message = jsonify({
+    'message': 'Pagina no encontrada' + request.url,
+    'status': 404
+  })
+  message.status_code = 404
+  return message
 
 if __name__=="__main__":
     app.run(debug=True)
