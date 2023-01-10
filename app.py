@@ -1,22 +1,22 @@
+import os
 from flask import Flask,request,jsonify,Response
 from flask_pymongo import PyMongo,ObjectId
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS
-
+import pymongo
 
 app = Flask(__name__)
-
 
 config = {
     "username": "root",
     "password": "password",
     "server": "mongo",
 }
+
 connector = "mongodb://{}:{}@{}".format(config["username"], config["password"], config["server"])
+client = pymongo.MongoClient(connector)
 
-app.config['MONGO_URI'] =connector
 
-client=PyMongo(app)
 cors = CORS(app, resources={r"/usuarios/*": {"origins": "*"}})
 
 
