@@ -5,15 +5,16 @@ from flask_cors import CORS
 
 
 app = Flask(__name__)
-app.config['MONGO_URI'] ='mongodb://127.0.0.1:27017/pythonreact'
-'''
+
+
 config = {
     "username": "root",
     "password": "password",
     "server": "mongo",
 }
 connector = "mongodb://{}:{}@{}".format(config["username"], config["password"], config["server"])
-'''
+
+app.config['MONGO_URI'] =connector
 
 client=PyMongo(app)
 cors = CORS(app, resources={r"/usuarios/*": {"origins": "*"}})
